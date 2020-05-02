@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Platform, KeyboardAvoidingView} from 'react-native';
 
 import {fetchLyrics} from '../../store/services/fetchLyrics';
 import {addSearch} from '../../store/actions/lyricsActions';
@@ -18,6 +19,10 @@ import {
   InputsWrapper,
   HistoryButton,
   LastSearchContainer,
+  TitleButton,
+  LastSearchWrapper,
+  KeyboardWrapper,
+  SearchTextButtonLast,
 } from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/Colors';
@@ -66,65 +71,71 @@ const StartScreen = ({navigation}) => {
 
   return (
     <StartView>
-      <HistoryButton
-        onPress={() => {
-          navigation.navigate({routeName: 'History'});
-        }}>
-        <Icon name="history" size={30} color={Colors.secondary} />
-      </HistoryButton>
-      <InputsWrapper>
-        <Icon name="music" size={40} color={Colors.secondary} />
-        <TitleContainer>
-          <TitleBlack>Lyrics</TitleBlack>
-          <TitleWhite>finder</TitleWhite>
-        </TitleContainer>
-        <Input>
-          <InputText
-            autoFocus={true}
-            placeholder="Enter Artist Name"
-            placeholderTextColor="#C7C7CD"
-            onChangeText={(text) => {
-              setArtistState(text);
-            }}
-            value={artistState}
-          />
-        </Input>
-        <Input>
-          <InputText
-            placeholder="Enter Song Name"
-            placeholderTextColor="#C7C7CD"
-            onChangeText={(text) => {
-              setTitleState(text);
-            }}
-            value={titleState}
-          />
-        </Input>
-        <ButtonContainer>
-          <SearchIcon name="search" size={16} color={Colors.solid} />
-          <SearchTextButton
-            color={Colors.solid}
-            title="Let's Go!"
+      <KeyboardWrapper behavior={Platform.OS === 'ios' ? 'height' : null}>
+        <HistoryButton
+          onPress={() => {
+            navigation.navigate({routeName: 'History'});
+          }}>
+          <Icon name="history" size={30} color={Colors.secondary} />
+        </HistoryButton>
+        <InputsWrapper>
+          <Icon name="music" size={40} color={Colors.secondary} />
+          <TitleContainer>
+            <TitleBlack>Lyrics</TitleBlack>
+            <TitleWhite>finder</TitleWhite>
+          </TitleContainer>
+          <Input>
+            <InputText
+              autoFocus={true}
+              placeholder="Enter Artist Name"
+              placeholderTextColor="#C7C7CD"
+              onChangeText={(text) => {
+                setArtistState(text);
+              }}
+              value={artistState}
+            />
+          </Input>
+          <Input>
+            <InputText
+              placeholder="Enter Song Name"
+              placeholderTextColor="#C7C7CD"
+              onChangeText={(text) => {
+                setTitleState(text);
+              }}
+              value={titleState}
+            />
+          </Input>
+          <ButtonContainer
             onPress={() => {
               fetchLyricsHandler(artistState, titleState);
-            }}
-          />
-        </ButtonContainer>
-      </InputsWrapper>
-      {!storeLastSearch.artist ? null : (
-        <>
-          <TitleWhite>Last Search</TitleWhite>
-          <LastSearchContainer>
+            }}>
+            <SearchIcon name="search" size={16} color={Colors.solid} />
             <SearchTextButton
-              color={Colors.solid}
-              title={`Artist: ${storeLastSearch.artist} / Song: ${storeLastSearch.title}`}
-              onPress={() => {
-                setArtistState(storeLastSearch.artist);
-                setTitleState(storeLastSearch.title);
-              }}
-            />
-          </LastSearchContainer>
-        </>
-      )}
+              color={
+                Platform.OS === 'android' ? Colors.secondary : Colors.solid
+              }>
+              <TitleButton>Let's Go!</TitleButton>
+            </SearchTextButton>
+          </ButtonContainer>
+        </InputsWrapper>
+        {!storeLastSearch.artist ? null : (
+          <LastSearchWrapper>
+            <TitleWhite>Last Search</TitleWhite>
+            <LastSearchContainer>
+              <SearchTextButtonLast
+                color={
+                  Platform.OS === 'android' ? Colors.secondary : Colors.solid
+                }
+                onPress={() => {
+                  setArtistState(storeLastSearch.artist);
+                  setTitleState(storeLastSearch.title);
+                }}>
+                <TitleButton>{`Artist: ${storeLastSearch.artist} / Song: ${storeLastSearch.title}`}</TitleButton>
+              </SearchTextButtonLast>
+            </LastSearchContainer>
+          </LastSearchWrapper>
+        )}
+      </KeyboardWrapper>
     </StartView>
   );
 };

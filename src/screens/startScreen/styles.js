@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import Colors from '../../constants/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {KeyboardAvoidingView} from 'react-native';
 
 const StartView = styled.View`
   flex: 1;
@@ -8,10 +9,22 @@ const StartView = styled.View`
   align-items: center;
 `;
 
+const KeyboardWrapper = styled(KeyboardAvoidingView)`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+`;
+
 const InputsWrapper = styled.View`
   flex: 1;
   background-color: ${Colors.primary};
   align-items: center;
+  margin-top: 10%;
+`;
+
+const LastSearchWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
   margin-top: 20%;
 `;
 
@@ -47,6 +60,12 @@ const TitleBlack = styled.Text`
   font-weight: 600;
   flex-direction: row;
 `;
+const TitleButton = styled.Text`
+  font-size: 18px;
+  color: ${Colors.solid};
+  font-weight: 600;
+  flex-direction: row;
+`;
 
 const TitleWhite = styled.Text`
   font-size: 24px;
@@ -55,9 +74,9 @@ const TitleWhite = styled.Text`
   flex-direction: row;
 `;
 
-const ButtonContainer = styled.View`
+const ButtonContainer = styled.TouchableOpacity`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-horizontal: 15px;
   border-radius: 10px;
@@ -82,13 +101,18 @@ const LastSearchContainer = styled.View`
   margin-top: 3%;
 `;
 
-const SearchTextButton = styled.Button`
+const SearchTextButton = styled.View`
+  font-size: 16px;
+  font-weight: 400;
+`;
+
+const SearchTextButtonLast = styled.TouchableOpacity`
   font-size: 16px;
   font-weight: 400;
 `;
 
 const SearchIcon = styled(Icon)`
-  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 const HistoryButton = styled.TouchableOpacity`
@@ -112,4 +136,8 @@ export {
   InputsWrapper,
   HistoryButton,
   LastSearchContainer,
+  TitleButton,
+  LastSearchWrapper,
+  KeyboardWrapper,
+  SearchTextButtonLast,
 };

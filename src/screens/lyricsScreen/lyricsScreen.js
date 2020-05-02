@@ -33,6 +33,9 @@ const LyricsScreen = ({navigation: {goBack}}) => {
   const error = useSelector((state) => state.error);
   const [historyLocal, setHistoryLocal] = useState(undefined);
 
+  console.log('store lyrics', storeLyrics);
+  console.log('history local ', historyLocal);
+
   const goBackHandler = () => {
     goBack();
     dispatch(addLyric({}));
@@ -45,19 +48,26 @@ const LyricsScreen = ({navigation: {goBack}}) => {
         addLastSearch({artist: storeSearch.artist, title: storeSearch.title}),
       );
       if (historyLocal.length <= 10) {
-        storeHistoryData(storeSearch.artist, storeSearch.title, storeLyrics);
+        let storeObj = {
+          artist: storeSearch.artist,
+          title: storeSearch.title,
+          lyrics: storeLyrics,
+        };
+        let index = historyLocal.findIndex(
+          (x) => x.lyrics.lyrics === storeObj.lyrics.lyrics,
+        );
+        if (index === -1) {
+          storeHistoryData(storeObj);
+        }
       }
     }
   };
 
-  const storeHistoryData = async (artist, title, lyrics) => {
+  const storeHistoryData = async (obj) => {
     try {
       await AsyncStorage.setItem(
         'historyArray',
-        JSON.stringify([
-          ...historyLocal,
-          {artist: artist, title: title, lyrics: lyrics},
-        ]),
+        JSON.stringify([...historyLocal, obj]),
       );
     } catch (e) {
       // saving error
