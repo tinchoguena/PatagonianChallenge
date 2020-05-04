@@ -23,6 +23,7 @@ import {
   LastSearchWrapper,
   KeyboardWrapper,
   SearchTextButtonLast,
+  ErrorMsj,
 } from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/Colors';
@@ -33,13 +34,22 @@ const StartScreen = ({navigation}) => {
   const [artistState, setArtistState] = useState('');
   const [titleState, setTitleState] = useState('');
   const [histoyLocalInit, setHistoyLocalInit] = useState(undefined);
+  const [searchErrorMsj, setSearchErrorMsj] = useState('');
   const storeLastSearch = useSelector((state) => state.lastSearch);
 
+  console.log('artist state', artistState);
+  console.log('title state', titleState);
+
   const fetchLyricsHandler = (artist, title) => {
+    if (!artistState || !titleState) {
+      setSearchErrorMsj('The inputs can not be empty');
+      return;
+    }
     dispatch(fetchLyrics(artist, title));
     dispatch(addSearch({artist: artistState, title: titleState}));
     setArtistState('');
     setTitleState('');
+    setSearchErrorMsj('');
     navigation.navigate({routeName: 'Lyrics'});
   };
 
@@ -117,6 +127,7 @@ const StartScreen = ({navigation}) => {
               <TitleButton>Let's Go!</TitleButton>
             </SearchTextButton>
           </ButtonContainer>
+          {searchErrorMsj ? <ErrorMsj>{searchErrorMsj}</ErrorMsj> : null}
         </InputsWrapper>
         {!storeLastSearch.artist ? null : (
           <LastSearchWrapper>

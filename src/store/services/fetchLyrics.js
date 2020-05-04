@@ -7,18 +7,17 @@ export const fetchLyrics = (artist, title) => {
     fetch(`https://api.lyrics.ovh/v1/${artist}/${title}`)
       .then((response) => {
         if (!response.ok) {
-          dispatch(
-            setError(
-              'There was an error getting your lyrics, try again, please',
-            ),
-          );
-          throw Error(response.statusText);
+          dispatch(setError('There are not results for this artist or song'));
         }
         dispatch(setLoading(false));
         return response;
       })
       .then((response) => response.json())
       .then((response) => dispatch(addLyric(response)))
-      .catch(() => console.log('error'));
+      .catch(() => {
+        dispatch(
+          setError('There was an error getting your lyrics, try again, please'),
+        );
+      });
   };
 };

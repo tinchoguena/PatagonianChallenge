@@ -123,6 +123,13 @@ const HistoryButton = styled.TouchableOpacity`
   margin-right: 4%;
 `;
 
+const ErrorMsj = styled.Text`
+  padding-top: 3%;
+  height: 40px;
+  color: red;
+  font-size: 16px;
+`;
+
 export {
   StartView,
   TitleWhite,
@@ -140,4 +147,5 @@ export {
   LastSearchWrapper,
   KeyboardWrapper,
   SearchTextButtonLast,
+  ErrorMsj,
 };

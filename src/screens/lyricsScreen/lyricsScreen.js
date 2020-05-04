@@ -42,7 +42,64 @@ const LyricsScreen = ({navigation: {goBack}}) => {
     dispatch(setError(''));
   };
 
-  const dispatchLastSearch = () => {
+  // const dispatchLastSearch = () => {
+  //   if (storeLyrics.lyrics) {
+  //     dispatch(
+  //       addLastSearch({artist: storeSearch.artist, title: storeSearch.title}),
+  //     );
+  //     if (historyLocal.length <= 10) {
+  //       let storeObj = {
+  //         artist: storeSearch.artist,
+  //         title: storeSearch.title,
+  //         lyrics: storeLyrics,
+  //       };
+  //       let index = historyLocal.findIndex(
+  //         (x) => x.lyrics.lyrics === storeObj.lyrics.lyrics,
+  //       );
+  //       if (index === -1) {
+  //         storeHistoryData(storeObj);
+  //       }
+  //     }
+  //   }
+  // };
+
+  // const storeHistoryData = async (obj) => {
+  //   try {
+  //     await AsyncStorage.setItem(
+  //       'historyArray',
+  //       JSON.stringify([...historyLocal, obj]),
+  //     );
+  //   } catch (e) {
+  //     // saving error
+  //   }
+  // };
+
+  const getHistoryData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('historyArray');
+      if (value !== null) {
+        setHistoryLocal(JSON.parse(value));
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getHistoryData();
+  }, []);
+
+  useEffect(() => {
+    const storeHistoryData = async (obj) => {
+      try {
+        await AsyncStorage.setItem(
+          'historyArray',
+          JSON.stringify([...historyLocal, obj]),
+        );
+      } catch (e) {
+        // saving error
+      }
+    };
     if (storeLyrics.lyrics) {
       dispatch(
         addLastSearch({artist: storeSearch.artist, title: storeSearch.title}),
@@ -61,37 +118,13 @@ const LyricsScreen = ({navigation: {goBack}}) => {
         }
       }
     }
-  };
-
-  const storeHistoryData = async (obj) => {
-    try {
-      await AsyncStorage.setItem(
-        'historyArray',
-        JSON.stringify([...historyLocal, obj]),
-      );
-    } catch (e) {
-      // saving error
-    }
-  };
-
-  const getHistoryData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('historyArray');
-      if (value !== null) {
-        setHistoryLocal(JSON.parse(value));
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  useEffect(() => {
-    getHistoryData();
-  }, []);
-
-  useEffect(() => {
-    dispatchLastSearch();
-  }, [storeLyrics]);
+  }, [
+    dispatch,
+    historyLocal,
+    storeLyrics,
+    storeSearch.artist,
+    storeSearch.title,
+  ]);
 
   return (
     <ScreenView>
