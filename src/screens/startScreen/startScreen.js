@@ -37,9 +37,6 @@ const StartScreen = ({navigation}) => {
   const [searchErrorMsj, setSearchErrorMsj] = useState('');
   const storeLastSearch = useSelector((state) => state.lastSearch);
 
-  console.log('artist state', artistState);
-  console.log('title state', titleState);
-
   const fetchLyricsHandler = (artist, title) => {
     if (!artistState || !titleState) {
       setSearchErrorMsj('The inputs can not be empty');
